@@ -46,4 +46,19 @@ class Carro
         return $array;
     }
 
+    public function getNomeCarroById(int $id) : string
+    {
+        $nomeCarro = '';
+
+        $sql = 'SELECT nome FROM carros WHERE id = :id';
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $nomeCarro = $sql->fetch()['nome'];
+        }
+
+        return $nomeCarro;
+    }
 }

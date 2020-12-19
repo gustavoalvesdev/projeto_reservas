@@ -1,16 +1,40 @@
-<?php 
+<table border="1" width="100%">
+    <tr>
+        <th>Dom</th>
+        <th>Seg</th>
+        <th>Ter</th>
+        <th>Qua</th>
+        <th>Qui</th>
+        <th>Sex</th>
+        <th>Sáb</th>
+    </tr>
+    <?php for($i = 0; $i < $linhas; $i++) : ?>
+        <tr>
+            <?php for ($j = 0; $j < 7; $j++): ?>
+                <?php  
+                    $t = strtotime(($j + ($i * 7)) . ' days', strtotime($dataInicio));    
+                    $w = date('Y-m-d', $t);
+                ?>
+                <td>
+                    <?php
+                        
+                        echo date('d/m', $t).'<br /><br />';
+                        $w = strtotime($w);
 
-$data = '2020-12';
+                        foreach($lista as $item) {
+                            $drInicio = strtotime($item['data_inicio']);
+                            $drFim = strtotime($item['data_fim']);
 
-$dia1 = date('w', strtotime($data . '-01'));
-$dias = date('t', strtotime($data));
-$linhas = ceil(($dia1 + $dias) / 7);
-$dia1 = -$dia1;
-$dataInicio = date('Y-m-d', strtotime($dia1.' days', strtotime($data)));
-$dataFim = date('Y-m-d', strtotime((($dia1 + ($linhas * 7) - 1)).' days', strtotime($data)));
+                            $nomeCarro = $carro->getNomeCarroById($item['id_carro']);
 
-echo 'PRIMEIRO DIA: '.$dia1.'<br />';
-echo 'TOTAL DIAS: '.$dias.'<br />';
-echo 'LINHAS: '.$linhas.'<br />';
-echo 'DATA INÍCIO: '.$dataInicio.'<br />';
-echo 'DATA FIM: '.$dataFim.'<br />';
+                            if ($w >= $drInicio && $w <= $drFim) {
+                                echo $item['pessoa'].' ('.$nomeCarro.')'.'<br />';
+                            }
+                        }
+                    ?>
+                </td>
+
+            <?php endfor; ?>
+        </tr>
+    <?php endfor; ?>
+</table>

@@ -65,12 +65,15 @@ class Reserva
     }
 
 
-    public function getReservas() : array 
+    public function getReservas(string $dataInicio, string $dataFim) : array 
     {
         $array = [];
 
-        $sql = 'SELECT * FROM reservas';
-        $sql = $this->pdo->query($sql);
+        $sql = 'SELECT * FROM reservas WHERE (NOT(data_inicio > :data_fim OR data_fim < :data_inicio))';
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(':data_inicio', $dataInicio);
+        $sql->bindvalue(':data_fim', $dataFim);
+        $sql->execute();
 
         if ($sql->rowCount() > 0) {
             $array = $sql->fetchAll();
